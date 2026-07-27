@@ -1,4 +1,4 @@
-# 4. 抗体糖鎖の基礎：Fab糖鎖とO型糖鎖をintact MSでどう考えるか
+# 4. 抗体・抗原糖鎖の基礎：Fab糖鎖とO型糖鎖をintact MSでどう考えるか
 
 ## この資料の目的
 
@@ -8,6 +8,7 @@
 - Fc N型糖鎖、Fab N型糖鎖、O型糖鎖をどう区別するか
 - PNGase F処理後にも不均一性が残るとき、何を疑うべきか
 - Fab糖鎖を取り切る条件と、O型糖鎖を処理する条件をどう最適化するか
+- intact MSで測定する抗原タンパク質自身のN型・O型糖鎖をどう評価するか
 - intact MSだけで言えることと、ペプチドマッピングが必要なことの境界はどこか
 
 中心となる文献は、KrištićとLaucによる2024年の総説「The importance of IgG glycosylation—What did we learn after analyzing over 100,000 individuals」である。この総説が主に扱うのはヒト血漿IgGであり、以下の実験設計部分では、組換え抗体や治療用抗体の解析へ適用するために酵素特異性とMS上の注意を補足した。
@@ -19,6 +20,7 @@
 > 3. IgG3はFc N型糖鎖に加え、ヒンジにO型糖鎖を持ち得る。
 > 4. PNGase FはアクセスできるN型糖鎖をFc/Fabの区別なく外すが、O型糖鎖は外さない。
 > 5. 「PNGase F後にピークが残る」だけでは、O型糖鎖、Fab N型糖鎖の未消化、非糖鎖修飾を区別できない。
+> 6. 抗原側の糖鎖は、抗体結合を妨げる場合、促進する場合、エピトープの一部になる場合がある。
 
 ---
 
@@ -318,7 +320,164 @@ intact MSは組成差と全体分布には強いが、位置決定には限界�
 
 ---
 
-## 10. まとめ
+## 10. 抗原タンパク質自身に結合するN型・O型糖鎖
+
+ここでいう「抗原糖鎖」は、抗体に結合する遊離糖鎖ではなく、intact MSの測定対象となる抗原タンパク質に共有結合した糖鎖を指す。抗体側のFab糖鎖とは別の変数として扱う。
+
+### 10.1 抗原糖鎖が抗体結合へ与える3種類の影響
+
+抗原上の糖鎖と抗体結合の関係は、次の3つに分けて考える。
+
+1. **糖鎖がエピトープを覆う**
+
+   糖鎖がペプチド表面への接近を妨げる。この場合、脱糖鎖によって抗体結合が増える可能性がある。
+2. **糖鎖がエピトープの一部になる**
+
+   抗体が糖鎖そのもの、または糖鎖とペプチドを合わせたglycopeptide epitopeを認識する。この場合、脱糖鎖すると結合が低下または消失する。
+3. **糖鎖が抗原の立体構造を間接的に支える**
+
+   抗体が糖鎖へ直接接触しなくても、糖鎖除去によって抗原が変性または局所的に構造変化し、結合が変わることがある。
+
+したがって、脱糖鎖前後の結合差だけから「抗体が糖鎖を直接認識する」とは断定できない。直接認識、steric masking、構造変化を切り分ける必要がある。
+
+HIV Envでは、N型糖鎖がprotein epitopeを覆うglycan shieldを形成する一方、一部の広域中和抗体はN型糖鎖を含むエピトープを認識する。MUC1では、O型糖鎖が抗体との直接接触に加え、ペプチド部分の構造平衡を変えることで結合性に影響する例が報告されている。
+
+### 10.2 抗原のN型糖鎖
+
+抗原タンパク質でも、基本的なN型糖鎖付加規則は`Asn-X-Ser/Thr`（Xは通常Pro以外）である。ただし、配列中にsequonがあっても必ず占有されるとは限らない。
+
+N型糖鎖の解析では、次の3段階を分けて考える。
+
+- **macroheterogeneity**：部位が占有される分子と、占有されない分子が混在する
+- **microheterogeneity**：同じ部位に異なる糖鎖構造が付く
+- **site combination**：複数部位の占有状態と糖鎖構造が組み合わさる
+
+N型糖鎖部位が多い抗原では、intact質量だけから個々のglycoformを一意に割り当てることが急速に難しくなる。たとえばSARS-CoV-2 spikeには1 protomer当たり22個のN型糖鎖sequonがあり、HIV Env trimerには約90本のN型糖鎖が存在する。このような抗原では、intact MSは全体分布、脱糖鎖前後の質量差、主要集団の比較には使えるが、部位別構造の決定にはglycopeptide解析が必要である。
+
+### 10.3 抗原のO型糖鎖
+
+抗原のO型糖鎖は、IgG3に限定されない。分泌タンパク質、膜タンパク質、mucin、ウイルス表面タンパク質、linkerを含む融合タンパク質など、多様な抗原に存在し得る。
+
+O-GalNAc型糖鎖はSer/Thrに結合し、N型糖鎖のような単純な共通sequonを持たない。次の特徴を持つ領域では候補として優先する。
+
+- Ser/Thrが集中する領域
+- Proが多い、構造的に柔軟な領域
+- mucin-like領域
+- signal peptide通過後に細胞外へ分泌される領域
+- 人工linker、特にSerを含むlinker
+- プロテアーゼ切断部位の近傍
+
+ただし、配列だけでsite occupancyや糖鎖構造を確定することはできない。
+
+抗原O型糖鎖ではcore 1以外にも、core 2、core 3、Tn、sialyl-Tn、O-mannose、O-fucose、O-glucose、glycosaminoglycan結合型などを考える必要がある。一般的なO-Glycosidaseが除去できるのは主にdesialylated core 1/core 3であり、「O型糖鎖全般を外す酵素」ではない。
+
+### 10.4 発現宿主から予想する
+
+抗原糖鎖は、アミノ酸配列だけでなく、発現宿主、細胞株、培養条件、立体構造、精製工程に依存する。同じHEK293発現抗原でも製造条件や供給元によってsite-specific glycan profileが異なることが報告されている。
+
+| 発現・由来 | 想定する糖鎖 | intact MSでの注意 |
+|---|---|---|
+| ヒト組織・血漿由来 | 複合型N糖鎖、mucin型O糖鎖など | ドナー、組織、疾患状態による不均一性 |
+| CHO、HEKなど哺乳類細胞 | 複合型、ハイブリッド型、高マンノース型N糖鎖、O-GalNAc型 | 細胞株と培養条件で末端Gal、Sia、Fucが変わる |
+| 昆虫細胞 | paucimannose、高マンノース、core Fucを含むN糖鎖など | core α1-3 FucがあるとPNGase F耐性になり得る |
+| 植物 | core α1-3 Fuc、β1-2 Xylを含むN糖鎖など | PNGase Fで外れないN糖鎖を考える |
+| 酵母 | 高マンノース/過マンノース型N糖鎖、O-mannose型 | 哺乳類O-Glycosidaseの適用範囲外になりやすい |
+| 大腸菌 | 通常は真核生物型N/O糖鎖を付加しない | glycoengineered株、培地由来adduct、非酵素的糖化は別途確認 |
+
+「同じ抗原配列だから同じ質量分布になる」とは限らない。ロット比較では発現宿主だけでなく、細胞株、培養条件、construct、精製法も記録する。
+
+### 10.5 Fc-fusion抗原は糖鎖の由来を分けて考える
+
+Fc-fusion抗原では、少なくとも次の3領域が糖鎖を持ち得る。
+
+- IgG Fc Asn297のN型糖鎖
+- 抗原ドメイン自身のN型/O型糖鎖
+- hingeまたはlinkerのO型糖鎖
+
+Serを含むGS linkerを使用したCHO産Fc-fusionで、予期しないO型糖鎖やglycosaminoglycan型修飾が検出された報告がある。PNGase F後にもlinker由来の不均一性が残る可能性がある。
+
+Fc-fusionでは、別アリコートをEndoS2処理するとFc N型糖鎖を選択的に単純化できる。EndoS2後にも残る糖鎖様不均一性は、抗原ドメイン、linker、O型糖鎖、または非糖鎖修飾に由来する可能性が高くなる。
+
+### 10.6 抗原糖鎖を切り分ける並列実験
+
+抗原試料でも、同一試料から分けた並列反応を基本にする。
+
+| 条件 | 処理 | 主に評価できること |
+|---|---|---|
+| A | 未処理 | 抗原全体の不均一性 |
+| B | Bufferのみ | 加熱、pH、界面活性剤による変化 |
+| C | PNGase F、native条件 | 表面に露出したN型糖鎖 |
+| D | PNGase F、変性条件 | N型糖鎖の完全除去に近い陽性対照 |
+| E | Endo H | 高マンノース型と一部ハイブリッド型N糖鎖の寄与 |
+| F | Sialidase | N型/O型を合わせた末端シアル酸の寄与 |
+| G | Sialidase＋O-Glycosidase | 除去可能なcore 1/core 3 O型糖鎖 |
+| H | PNGase F＋Sialidase＋O-Glycosidase | N型糖鎖と除去可能な短いO型糖鎖を除いたバックボーン |
+| I | EndoS2、Fc-fusionのみ | Fc N型糖鎖と抗原/linker糖鎖の切り分け |
+
+#### 比較の読み方
+
+- **Cで一部残り、Dで消える**：N型糖鎖への立体アクセスが不十分
+- **Eで消える成分**：高マンノース型またはEndo H感受性hybrid型の可能性
+- **Fで約291 Da単位に収束する**：Neu5Acを含む糖鎖の可能性
+- **Dで残り、Hで消える**：除去可能なO型糖鎖の可能性
+- **Gで変化せず、O型糖鎖が疑われる**：core 1/core 3以外、シアル酸除去不足、酵素アクセス不足を検討
+- **IでFc由来分だけ単純化する**：残りを抗原ドメイン/linker側の候補として調べる
+- **Hでも残る**：非対応糖鎖、未消化、糖化、酸化、リン酸化、硫酸化、切断、adductを検討
+
+PNGase F処理後の約+0.984 Da/siteは、糖鎖除去時のAsn→Asp変換に由来する。複数サイトを持つ抗原では理論aglyco massへこの差を加える必要がある。
+
+### 10.7 糖鎖と糖化を混同しない
+
+約+162 Da差はHex残基の差を示唆するが、酵素的な糖鎖だけでなく、還元糖がLysやN末端へ非酵素的に付加する糖化でも生じる。
+
+- PNGase Fで消える：N型糖鎖由来を支持
+- O-Glycosidase系で消える：対応するO型糖鎖由来を支持
+- どちらでも消えない+162 Da：糖化、酵素耐性糖鎖、別修飾を検討
+
+糖残基の質量差だけでglycosylationと判定しない。
+
+### 10.8 抗原結合評価とMS用脱糖鎖処理を分ける
+
+完全脱糖鎖バックボーンを得るための変性処理は、抗原の立体構造や抗体結合能を破壊し得る。次の2目的を分ける。
+
+1. **分析上の質量単純化**
+
+   変性条件を含め、完全消化を優先する。
+2. **糖鎖が抗体結合へ与える影響の評価**
+
+   native性を保てる条件を使用し、未処理、Buffer対照、酵素処理を比較する。反応後は酵素とBufferを除去し、抗原濃度と回収率をそろえて結合測定する。
+
+結合評価では少なくとも次を確認する。
+
+- SECなどでaggregateとmonomer回収率を確認
+- 同一濃度へ補正
+- 抗体結合だけでなく、既知のconformation-sensitive抗体または受容体結合も確認
+- PNGase F、Sialidase、O-Glycosidaseごとの単独条件を置く
+- 糖鎖を戻せないため、可能ならglycoengineered抗原やsite mutantで直交検証する
+
+### 10.9 intact MSで分かることと分からないこと
+
+#### intact MSで比較的分かりやすいこと
+
+- 糖鎖を含む総質量分布
+- 酵素処理による全体の質量変化
+- 主要glycoform間のHex、HexNAc、Fuc、Neu5Ac単位の差
+- ロット間、発現宿主間、処理条件間の全体比較
+- 完全脱糖鎖バックボーンの質量確認
+
+#### intact MS単独では決めにくいこと
+
+- どの部位にどの糖鎖が付いているか
+- 同一組成の構造異性体と結合様式
+- 複数部位間の糖鎖分布
+- 糖鎖が抗体と直接接触しているか
+- O型糖鎖の正確なsite occupancy
+
+多部位抗原では、intact MSで全体像を把握した後、subunit解析、glycopeptide mapping、released glycan解析、必要に応じてETD/EThcDを用いたO-glycosite解析へ進む。
+
+---
+
+## 11. まとめ
 
 - Fc Asn297 N型糖鎖はIgGの基本糖鎖で、抗体1分子に通常2本あり、組合せのためintact質量は複雑になる。
 - Fab N型糖鎖はヒト血漿IgGの15～25%に存在し、Fcよりシアル化・bisectingが多い。抗体ごとに部位とアクセス性が異なる。
@@ -327,6 +486,8 @@ intact MSは組成差と全体分布には強いが、位置決定には限界�
 - O型糖鎖の処理は、Sialidaseで末端シアル酸を外してからO-Glycosidaseを作用させる。
 - 最適化では、未処理、Buffer、EndoS2、PNGase F、Sialidase、O-Glycosidaseの並列条件を置き、消化率、回収率、fragment/aggregateを同時に評価する。
 - intact MSで構造候補を絞り、位置と占有率の確定にはsubunit解析またはペプチドマッピングを使う。
+- 抗原側の糖鎖はエピトープを隠す場合、エピトープの一部になる場合、抗原構造を支える場合があり、脱糖鎖による結合変化の方向は一様ではない。
+- 抗原糖鎖は配列だけでなく発現宿主、細胞株、construct、培養条件に依存する。Fc-fusionではFc、抗原ドメイン、linkerを分けて評価する。
 
 ---
 
@@ -350,3 +511,12 @@ intact MSは組成差と全体分布には強いが、位置決定には限界�
 - Albert H, Collin M, Dudziak D, Ravetch JV, Nimmerjahn F. [In vivo enzymatic modulation of IgG glycosylation inhibits autoimmune disease in an IgG subclass-dependent manner](https://doi.org/10.1073/pnas.0808248105). *PNAS*. 2008.
 - Trastoy B, Du JJ, Cifuente JO, et al. [Mechanism of antibody-specific deglycosylation and immune evasion by Streptococcal IgG-specific endoglycosidases](https://doi.org/10.1038/s41467-023-37215-3). *Nature Communications*. 2023.
 - Collin M, Olsén A. [EndoS, a novel secreted protein from Streptococcus pyogenes with endoglycosidase activity on human IgG](https://pubmed.ncbi.nlm.nih.gov/11406581/). *EMBO Journal*. 2001.
+
+### 抗原糖鎖と抗体結合・intact MSの補足
+
+- Watanabe Y, Allen JD, Wrapp D, McLellan JS, Crispin M. [Site-specific glycan analysis of the SARS-CoV-2 spike](https://doi.org/10.1126/science.abb9983). *Science*. 2020. Spike 1 protomer当たり22個のN型糖鎖sequonと、部位ごとの糖鎖processingが解析されている。
+- Cao L, Diedrich JK, Kulp DW, et al. [Global site-specific N-glycosylation analysis of HIV envelope glycoprotein](https://doi.org/10.1038/ncomms14954). *Nature Communications*. 2017. 多数のN型糖鎖部位を持つ抗原で、Endo HとPNGase Fの反応痕跡を利用したsite-specific解析が示されている。
+- Andrabi R, Su CY, Liang CH, et al. [Glycans function as anchors for antibodies and help drive HIV broadly neutralizing antibody development](https://doi.org/10.1016/j.immuni.2017.08.006). *Immunity*. 2017. 抗原N型糖鎖が抗体エピトープの一部として働く例。
+- Movahedin M, Brooks TM, Supekar NT, et al. [Glycosylation of MUC1 influences the binding of a therapeutic antibody by altering the conformational equilibrium of the antigen](https://doi.org/10.1093/glycob/cww131). *Glycobiology*. 2017. 抗原O型糖鎖がglycopeptide構造と抗体結合へ影響する例。
+- Spahr C, Shi SDH, Lu HS. [O-Glycosylation of glycine-serine linkers in recombinant Fc-fusion proteins](https://doi.org/10.4161/mabs.28763). *mAbs*. 2014. CHO産Fc-fusionのGS linkerに、予期しないO型糖鎖・glycosaminoglycan型修飾が生じた例。
+- Goecker ZC, Burke Harris M, Remoroza C, et al. [Variation of site-specific glycosylation profiles of recombinant influenza glycoproteins](https://doi.org/10.1016/j.mcpro.2024.100827). *Molecular & Cellular Proteomics*. 2024. 同じHEK293発現でも、製造された組換えHA/neuraminidaseのsite-specific N型糖鎖が異なり得ることを示す。
